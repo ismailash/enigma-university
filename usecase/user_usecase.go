@@ -10,6 +10,8 @@ import (
 type UserUseCase interface {
 	// Register(newUser model.User) string
 	FindById(id string) (model.User, error)
+	// Edit
+	// Remove
 }
 
 type userUseCase struct {
@@ -28,6 +30,7 @@ func (u *userUseCase) FindById(id string) (model.User, error) {
 	return user, err
 }
 
+// constructor
 func NewUserUseCase(repo repository.UserRepository) UserUseCase {
 	return &userUseCase{repo: repo}
 }
