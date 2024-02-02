@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 
+	"github.com/eulbyvan/enigma-university/model/dto/res"
 	"github.com/eulbyvan/enigma-university/usecase"
 	"github.com/gin-gonic/gin"
 )
@@ -18,11 +19,18 @@ func NewUserController(userUseCase usecase.UserUseCase) *UserController {
 func (c *UserController) FindById(ctx *gin.Context) {
 	userID := ctx.Query("id")
 
+	var res res.CommonResponse
+
 	user, err := c.userUseCase.FindById(userID)
 
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 	}
 
-	ctx.JSON(http.StatusOK, user)
+	res.Code = http.StatusOK
+	res.Status = "Success"
+	res.Message = "Retrieved data successfully"
+	res.Data = user
+
+	ctx.JSON(http.StatusOK, res)
 }
