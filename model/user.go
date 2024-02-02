@@ -14,3 +14,9 @@ type User struct {
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
+
+func Role(id int) string {
+	role := []string{"user", "admin"}
+
+	return role[id]
+}
