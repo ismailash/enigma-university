@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/eulbyvan/enigma-university/model"
+	"github.com/eulbyvan/enigma-university/model/dto/req"
 )
 
 type UserRepository interface {
@@ -20,7 +21,7 @@ type UserRepository interface {
 	// delete
 	Delete(id string) error
 	// Login
-	Login(user model.User) bool
+	Login(credential req.Credential) bool
 }
 
 type userRepository struct {
@@ -217,21 +218,19 @@ func (u *userRepository) Delete(id string) error {
 	return nil
 }
 
-func (u *userRepository) Login(user model.User) bool {
+func (u *userRepository) Login(credential req.Credential) bool {
 	// implementasikan cara get by id
 	var username string
 
 	query := `SELECT username FROM users WHERE username=$1 AND password=$2`
 
-	row := u.db.QueryRow(query, user.Username, user.Password)
+	row := u.db.QueryRow(query, credential.Username, credential.Password)
 
 	if row.Scan(&username); username != "" {
-
 		return true
 	}
 
 	return false
-
 }
 
 // constructor

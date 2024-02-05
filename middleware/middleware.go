@@ -33,7 +33,7 @@ func AuthorizeMiddleware() gin.HandlerFunc {
 			c.Next()
 		} else {
 			c.JSON(http.StatusUnauthorized, gin.H{
-				"message": "Unautorized User/Token Access",
+				"message": "Unauthorized User/Token Access",
 			})
 			c.Abort()
 			return

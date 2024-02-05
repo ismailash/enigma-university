@@ -5,6 +5,7 @@ import (
 
 	"github.com/eulbyvan/enigma-university/middleware"
 	"github.com/eulbyvan/enigma-university/model"
+	"github.com/eulbyvan/enigma-university/model/dto/req"
 	"github.com/eulbyvan/enigma-university/model/dto/res"
 	"github.com/eulbyvan/enigma-university/usecase"
 	"github.com/gin-gonic/gin"
@@ -16,7 +17,10 @@ type UserController struct {
 }
 
 func NewUserController(userUseCase usecase.UserUseCase, rg *gin.RouterGroup) *UserController {
-	return &UserController{userUseCase: userUseCase}
+	return &UserController{
+		userUseCase: userUseCase,
+		rg:          rg,
+	}
 }
 
 func (c *UserController) FindById(ctx *gin.Context) {
@@ -133,15 +137,15 @@ func (c *UserController) Update(ctx *gin.Context) {
 
 func (c *UserController) Login(ctx *gin.Context) {
 
-	var user model.User
+	var credential req.Credential
 
 	// id := ctx.Param("id")
 
-	ctx.BindJSON(&user)
+	ctx.BindJSON(&credential)
 
 	var res res.CommonResponse
 
-	token, err := c.userUseCase.Login(user)
+	token, err := c.userUseCase.Login(credential)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

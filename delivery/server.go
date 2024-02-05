@@ -23,7 +23,7 @@ func (s *Server) setupControllers() { // ERROR DI SEKITAR SINI
 
 func (s *Server) Run() {
 	s.setupControllers()
-	if err := s.engine.Run(":8080"); err != nil {
+	if err := s.engine.Run(s.host); err != nil {
 		panic(err)
 	}
 }

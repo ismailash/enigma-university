@@ -5,6 +5,7 @@ import (
 
 	Middleware "github.com/eulbyvan/enigma-university/middleware"
 	"github.com/eulbyvan/enigma-university/model"
+	"github.com/eulbyvan/enigma-university/model/dto/req"
 	"github.com/eulbyvan/enigma-university/repository"
 )
 
@@ -20,7 +21,7 @@ type UserUseCase interface {
 	// Remove
 	Delete(id string) error
 	//
-	Login(user model.User) (string, error)
+	Login(credential req.Credential) (string, error)
 	//
 	Logout(token string) error
 }
@@ -91,22 +92,22 @@ func (u *userUseCase) Update(id string, user model.User) error {
 	return err
 }
 
-func (u *userUseCase) Login(user model.User) (string, error) {
-	auth := u.repo.Login(user)
+func (u *userUseCase) Login(credential req.Credential) (string, error) {
+	auth := u.repo.Login(credential)
 
 	if auth == false {
 		return "", fmt.Errorf("Username or Password Invalid!!")
 	}
 
 	for _, token := range Middleware.LocalToken {
-		if token == user.Username {
-			return user.Username, nil
+		if token == credential.Username {
+			return credential.Username, nil
 		}
 	}
 
-	Middleware.LocalToken = append(Middleware.LocalToken, user.Username)
+	Middleware.LocalToken = append(Middleware.LocalToken, credential.Username)
 
-	return user.Username, nil
+	return credential.Username, nil
 }
 
 func (u *userUseCase) Logout(token string) error {
